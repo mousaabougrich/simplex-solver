@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simplex Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-top: 0;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: calc(100% - 80px);
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+        button {
+            width: 120px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #objectiveFunction, #constraints {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simplex Solver</h1>
+        <div class="input-group">
+            <label for="numVariables">Number of Variables:</label>
+            <input type="number" id="numVariables" value="2" min="1">
+            <button onclick="setupVariables()">Set Variables</button>
+        </div>
+        <div class="input-group">
+            <label for="numConstraints">Number of Constraints:</label>
+            <input type="number" id="numConstraints" value="1" min="1">
+            <button onclick="setupConstraints()">Set Constraints</button>
+        </div>
+        <div id="objectiveFunction">
+            <h2>Objective Function Z = </h2>
+        </div>
+        <div id="constraints">
+            <h2>Constraints</h2>
+        </div>
+        <button onclick="solveSimplex()">Solve</button>
+        <div id="results"></div>
+    </div>
+    <script src="simplex.js"></script>
+</body>
+</html>
