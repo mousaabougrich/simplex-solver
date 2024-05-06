@@ -53,12 +53,15 @@ function setupConstraints() {
     }
 }
 
+
+
+
+// Function to solve the linear programming problem using the Simplex method
+// Function to solve the linear programming problem using the Simplex method
 // Function to solve the linear programming problem using the Simplex method
 function solveSimplex() {
-    // Get the number of variables and constraints
     const numVariables = parseInt(document.getElementById('numVariables').value);
     const numConstraints = parseInt(document.getElementById('numConstraints').value);
-    // Get the div containing constraint inputs
     const constraints = document.getElementById('constraints').getElementsByTagName('div');
     let tableau = [];
 
@@ -76,8 +79,10 @@ function solveSimplex() {
     zRow.push(parseFloat(document.getElementById('zConstant').value) || 0); // Z constant term
     tableau.push(zRow);
 
-    // Implement Simplex algorithm
+    displayTableau(tableau, 0, "Initial Tableau"); // Display the initial tableau
+
     let iterations = 0;
+    // Implement Simplex algorithm
     while (true) {
         const lastRow = tableau[tableau.length - 1];
         let pivotCol = lastRow.indexOf(Math.min(...lastRow.slice(0, -1)));
@@ -118,22 +123,27 @@ function solveSimplex() {
         }
 
         iterations++;
+        displayTableau(tableau, iterations, `Tableau after iteration ${iterations}`);
+
         if (iterations > 100) { // Prevent infinite loops
             console.error("Max iterations reached.");
             break;
         }
     }
 
-    displayResults(tableau);
+    displayResults(tableau); // Display final results
 }
 
-// Function to display the results of the Simplex method
+// Function to display each tableau
+// Function to display the final results
 function displayResults(tableau) {
     const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = "<h3>Results</h3>";
+    const finalResults = document.createElement("div");
+    finalResults.innerHTML = "<h3>Final Results</h3>";
 
-    // Extract the solution from the final tableau
     const z = tableau[tableau.length - 1][tableau[0].length - 1]; // Last element in the last row
+    let resultString = `Max Z = ${z.toFixed(2)}`;
+
     const numVariables = tableau[0].length - 1; // Number of variables
     const variableValues = new Array(numVariables).fill(0);
 
@@ -147,29 +157,42 @@ function displayResults(tableau) {
         }
     }
 
-    // Display Z (objective function) and variable values
-    let resultString = `Max Z = ${z.toFixed(2)}, `;
-    for (let i = 0; i < numVariables; i++) {
-        resultString += `X${i + 1} = ${variableValues[i].toFixed(2)}, `;
+    // Append variable values to result string
+    for (let i = 0; i < variableValues.length; i++) {
+        resultString += `, X${i + 1} = ${variableValues[i].toFixed(2)}`;
     }
-    resultsDiv.innerHTML += `<p>${resultString}</p>`;
 
-    // Display the original tableau
-    resultsDiv.innerHTML += "<h3>Original Tableau</h3>";
-    tableau.forEach(row => {
-        const rowDiv = document.createElement("div");
-        row.forEach(cell => {
-            const cellSpan = document.createElement("span");
-            cellSpan.textContent = `${cell.toFixed(2)}\t`;
-            cellSpan.style.marginRight = "10px";
-            rowDiv.appendChild(cellSpan);
-        });
-        resultsDiv.appendChild(rowDiv);
-    });
+    finalResults.innerHTML += `<p>${resultString}</p>`;
+    resultsDiv.appendChild(finalResults);
 }
+
+// Adjusted function to display each tableau
+function displayTableau(tableau, iteration, title) {
+    const resultsDiv = document.getElementById('results');
+    const iterationDiv = document.createElement("div");
+    iterationDiv.innerHTML = `<h3>${title}</h3>`;
+    const table = document.createElement('table');
+
+    tableau.forEach((row, index) => {
+        const tr = document.createElement('tr');
+        row.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = parseFloat(cell).toFixed(2);
+            tr.appendChild(td);
+        });
+        table.appendChild(tr);
+    });
+
+    iterationDiv.appendChild(table);
+    resultsDiv.appendChild(iterationDiv);
+}
+
+// Remaining parts of the solveSimplex function and other setup functions are unchanged
+
 
 // Execute setup functions when the window is loaded
 window.onload = function() {
     setupVariables();
     setupConstraints();
 }
+
